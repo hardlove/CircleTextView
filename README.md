@@ -1,3 +1,7 @@
+
+<img src="device-2017-03-11-214843.png" />
+
+
 # How to
 
 To get a Git project into your build:
