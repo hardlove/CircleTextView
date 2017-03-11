@@ -1,5 +1,5 @@
 
-<img src="device-2017-03-11-214843.png" />
+<img src="device-2017-03-11-214843.png" width="400"/>
 
 
 # How to
