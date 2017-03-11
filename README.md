@@ -1,4 +1,4 @@
-How to
+# How to
 
 To get a Git project into your build:
 
