@@ -4,6 +4,8 @@ import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.hokai.www.library.CircleTextView;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override

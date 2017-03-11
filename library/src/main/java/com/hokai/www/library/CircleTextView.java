@@ -1,4 +1,4 @@
-package com.hokai.circletextview;
+package com.hokai.www.library;
 
 import android.content.Context;
 import android.content.res.TypedArray;

@@ -12,7 +12,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.hokai.circletextview.MainActivity">
 
-    <com.hokai.circletextview.CircleTextView
+    <com.hokai.www.library.CircleTextView
         android:id="@+id/tv"
         android:layout_width="100dp"
         android:layout_height="100dp"
