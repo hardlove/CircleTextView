@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -8,9 +8,26 @@
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:orientation="vertical"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.hokai.circletextview.MainActivity">
+
+    <com.hokai.www.library.CircleTextView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:textColor="#33b5e5"
+        app:topTextSize="25sp"
+        app:bottomTextSize="14sp"
+        app:statusTextSize="14sp"
+        app:borderSize="10px"
+        app:backgroundColor="#00000000"
+        app:borderColor="#00ff00"
+        app:bottomText="Q q j k l g"
+        app:statusText="_"
+        app:centerText="露"
+        app:centerTextSize="36sp"
+        app:topText="24.594563464634"/>
 
     <com.hokai.www.library.CircleTextView
         android:id="@+id/tv"
@@ -20,8 +37,61 @@
         app:topTextSize="25sp"
         app:bottomTextSize="14sp"
         app:statusTextSize="14sp"
-        app:exampleDrawable="@android:drawable/ic_menu_add"
+        app:borderSize="10px"
+        app:backgroundColor="#00000000"
+        app:borderColor="#f4f"
         app:bottomText="Q q j k l g"
-        app:statusText="_"
+        app:statusText=""
+        app:centerText=""
+        app:centerTextSize="36sp"
         app:topText="24.594563464634"/>
-</RelativeLayout>
+
+
+    <com.hokai.www.library.CircleTextView
+
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:textColor="#33b5e5"
+        app:topTextSize="25sp"
+        app:bottomTextSize="14sp"
+        app:statusTextSize="14sp"
+        app:borderSize="10px"
+        app:backgroundColor="#330900"
+        app:borderColor="#ff00"
+        app:bottomText="Cm"
+        app:statusText=""
+        app:centerText=""
+        app:centerTextSize="36sp"
+        app:topText="60.5"/>
+    <com.hokai.www.library.CircleTextView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:textColor="#33b5e5"
+        app:topTextSize="25sp"
+        app:bottomTextSize="14sp"
+        app:statusTextSize="14sp"
+        app:borderSize="10px"
+        app:backgroundColor="#330900"
+        app:borderColor="#ff00"
+        app:bottomText="Cm"
+        app:statusText="￣"
+        app:centerText=""
+        app:centerTextSize="36sp"
+        app:topText="60.5"/>
+
+    <com.hokai.www.library.CircleTextView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:textColor="#33b5e5"
+        app:topTextSize="25sp"
+        app:bottomTextSize="14sp"
+        app:statusTextSize="14sp"
+        app:borderSize="10px"
+        app:backgroundColor="#330900"
+        app:borderColor="#ff00"
+        app:bottomText="Cm"
+        app:statusText="↓"
+        app:centerText=""
+        app:centerTextSize="36sp"
+        app:topText="60.5"/>
+</LinearLayout>

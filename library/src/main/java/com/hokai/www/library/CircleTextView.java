@@ -5,8 +5,11 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -15,24 +18,26 @@ import android.view.View;
  */
 public class CircleTextView extends View {
     private String mTopText;
+    private String mCenterText;
     private String mBottomText;
     private String mStatusText;
     private int mTextColor = Color.RED;
+    private int mBackgroundColor = 0x00ff0000;
     private float mTopTextSize = 40;
+    private float mCenterTextSize = 40;
     private float mBottomTextSize = 40;
     private float mStatusTextSize = 38;
-    private float mBorderSize = 5; // 边框宽度
+    private float mBorderSize = 25; // 边框宽度
     private float mTextPadding;//上下文字的间距
-    private int mBorderColor = Color.RED;
-    private Drawable mExampleDrawable;
 
-    private TextPaint mTopTextPaint;
-    private TextPaint mStatusTextPaint;
-    private TextPaint mBottomTextPaint;
+    private int mBorderColor = Color.RED;
     private TextPaint mBorderPaint;
+    private TextPaint mTextPaint;
     private float mTopTextWidth;
+    private float mCenterTextWidth;
     private float mStatusTextWidth;
     private float mTopTextHeight;
+    private float mCenterTextHeight;
     private float mBottomTextWidth;
     private float mBottomTextHeight;
     private float mStatusTextHeight;
@@ -59,12 +64,15 @@ public class CircleTextView extends View {
                 attrs, R.styleable.CircleTextView, defStyle, 0);
 
         mTopText = a.getString( R.styleable.CircleTextView_topText);
+        mCenterText = a.getString( R.styleable.CircleTextView_centerText);
         mBottomText = a.getString(R.styleable.CircleTextView_bottomText);
         mStatusText = a.getString(R.styleable.CircleTextView_statusText);
         mTextColor = a.getColor(R.styleable.CircleTextView_textColor,mTextColor);
+        mBackgroundColor = a.getColor(R.styleable.CircleTextView_backgroundColor,mBackgroundColor);
         // Use getDimensionPixelSize or getDimensionPixelOffset when dealing with
         // values that should fall on pixel boundaries.
         mTopTextSize = a.getDimension(R.styleable.CircleTextView_topTextSize, mTopTextSize);
+        mCenterTextSize = a.getDimension(R.styleable.CircleTextView_centerTextSize, mCenterTextSize);
         mBottomTextSize = a.getDimension(R.styleable.CircleTextView_bottomTextSize,mBottomTextSize);
         mStatusTextSize = a.getDimension(R.styleable.CircleTextView_statusTextSize, mStatusTextSize);
         mBorderSize = a.getDimension(R.styleable.CircleTextView_borderSize,mBorderSize);
@@ -79,18 +87,9 @@ public class CircleTextView extends View {
         a.recycle();
 
         // Set up a default TextPaint object
-        mTopTextPaint = new TextPaint();
-        mTopTextPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
-        //x默认是‘3’这个字符的左边在屏幕的位置，如果设置了paint.setTextAlign(Paint.Align.CENTER);那就是字符的中心，y是指定这个字符baseline在屏幕上的位置。
-        mTopTextPaint.setTextAlign(Paint.Align.CENTER);
+        mTextPaint = new TextPaint();
+        mTextPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
 
-        mBottomTextPaint = new TextPaint();
-        mBottomTextPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
-        mBottomTextPaint.setTextAlign(Paint.Align.CENTER);
-
-        mStatusTextPaint = new TextPaint();
-        mStatusTextPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
-        mStatusTextPaint.setTextAlign(Paint.Align.LEFT);
 
         mBorderPaint = new TextPaint();
         mBorderPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
@@ -103,27 +102,33 @@ public class CircleTextView extends View {
         invalidateTextPaintAndMeasurements();
     }
 
+
     private void invalidateTextPaintAndMeasurements() {
+        Rect mRect = new Rect();
         if (mTopText != null) {
-            mTopTextPaint.setTextSize(mTopTextSize);
-            mTopTextPaint.setColor(mTextColor);
-            mTopTextWidth = mTopTextPaint.measureText(mTopText);
-            Paint.FontMetrics fontMetrics = mTopTextPaint.getFontMetrics();
-            mTopTextHeight = fontMetrics.descent - fontMetrics.ascent;
+            mTextPaint.setTextSize(mTopTextSize);
+            mTextPaint.getTextBounds(mTopText, 0, mTopText.length(), mRect);
+            mTopTextWidth = mRect.width();
+            mTopTextHeight = mRect.height();
+        }
+        if (mCenterText != null) {
+            mTextPaint.setTextSize(mCenterTextSize);
+            mTextPaint.getTextBounds(mCenterText, 0, mCenterText.length(), mRect);
+            mCenterTextWidth = mRect.width();
+            mCenterTextHeight = mRect.height();
         }
         if (mBottomText != null) {
-            mBottomTextPaint.setTextSize(mBottomTextSize);
-            mBottomTextPaint.setColor(mTextColor);
-            mBottomTextWidth = mBottomTextPaint.measureText(mBottomText);
-            Paint.FontMetrics fontMetrics2 = mBottomTextPaint.getFontMetrics();
+            mTextPaint.setTextSize(mBottomTextSize);
+            mTextPaint.setColor(mTextColor);
+            mBottomTextWidth = mTextPaint.measureText(mBottomText);
+            Paint.FontMetrics fontMetrics2 = mTextPaint.getFontMetrics();
             mBottomTextHeight = fontMetrics2.descent - fontMetrics2.ascent;
         }
         if (mStatusText != null) {
-            mStatusTextPaint.setTextSize(mStatusTextSize);
-            mStatusTextPaint.setColor(mTextColor);
-            mStatusTextWidth = mStatusTextPaint.measureText(mStatusText);
-            Paint.FontMetrics fontMetrics3 = mStatusTextPaint.getFontMetrics();
-            mStatusTextHeight = fontMetrics3.descent - fontMetrics3.ascent;
+            mTextPaint.setTextSize(mStatusTextSize);
+            mTextPaint.getTextBounds(mStatusText, 0, mStatusText.length(), mRect);
+            mStatusTextWidth = mRect.width();
+            mStatusTextHeight = mRect.height();
         }
         mBorderPaint.setStrokeWidth(mBorderSize);
         mBorderPaint.setColor(mBorderColor);
@@ -141,46 +146,71 @@ public class CircleTextView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        boolean adjust = false;
-        String topStr = mTopText;
-        if (mTopText != null) {
-            // Draw the top text.
-            int end = mTopText.length();
-            if (mTopTextWidth + 2*mStatusTextWidth > mViewSize) {
-                end = (int) (mViewSize * 1.0f / mTopTextWidth * end) - 2;
-                topStr = mTopText.substring(0, end);
-                topStr = topStr + "..";
-                end = topStr.length();
-                adjust = true;
-            }
-            canvas.drawText(topStr, 0, end, mViewSize / 2, (mViewSize - mTextPadding) / 2, mTopTextPaint);
-        }
+        //Draw background
+        mBorderPaint.setColor(mBackgroundColor);
+        mBorderPaint.setStyle(Paint.Style.FILL);
+        canvas.drawCircle(mViewSize / 2, mViewSize / 2, mViewSize / 2, mBorderPaint);
 
-        if (mBottomText != null) {
-            // Draw the bottom text.
-            int end = mBottomText.length();
-            String bottomStr = mBottomText;
-            if (mBottomTextWidth > mViewSize) {
-                end = (int) (mViewSize * 1.0f / mBottomTextWidth * end) - 2;
-                bottomStr = mBottomText.substring(0, end) + "..";
-                end = end + "..".length();
-
-            }
-            canvas.drawText(bottomStr, 0, end, mViewSize / 2, (mViewSize) / 2 + mBottomTextHeight, mBottomTextPaint);
-        }
-        if (mStatusText != null) {
-            if (adjust) {
-                float offset = mTopTextPaint.measureText(topStr.substring(0, topStr.length() - 2))/2;
-                canvas.drawText(mStatusText, (mViewSize) / 2 + offset, (mViewSize - mTextPadding - (mTopTextHeight - mStatusTextHeight)) / 2, mStatusTextPaint);
-            } else {
-                canvas.drawText(mStatusText, (mViewSize + mTopTextWidth) / 2, (mViewSize - mTextPadding - (mTopTextHeight - mStatusTextHeight)) / 2, mStatusTextPaint);
-            }
-        }
+        drawText(canvas);
 
         //Draw border
+        mBorderPaint.setStyle(Paint.Style.STROKE);
+        mBorderPaint.setColor(mBorderColor);
+        mBorderPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER));
         canvas.drawCircle(mViewSize / 2, mViewSize / 2, (mViewSize - mBorderSize) / 2, mBorderPaint);
-        //Draw center line
-//        canvas.drawLine(0,mViewSize/2,mViewSize,mViewSize/2,mBorderPaint);
+
+    }
+
+    private void drawText(Canvas canvas) {
+        mTextPaint.setColor(mTextColor);
+        if (TextUtils.isEmpty(mCenterText)) {
+            mTextPaint.setTextAlign(Paint.Align.CENTER);
+            boolean adjust = false;
+            String topStr = mTopText;
+            if (mTopText != null) {
+                // Draw the top text.
+                int end = mTopText.length();
+                if (mTopTextWidth + 2 * mStatusTextWidth > mViewSize) {
+
+                    end = (int) (mViewSize * 1.0f / mTopTextWidth * end) - 2;
+                    topStr = mTopText.substring(0, end);
+                    topStr = topStr + "..";
+                    end = topStr.length();
+                    adjust = true;
+                }
+                mTextPaint.setTextSize(mTopTextSize);
+                canvas.drawText(topStr, 0, end, mViewSize / 2, (mViewSize - mTextPadding) / 2, mTextPaint);
+            }
+
+            if (mBottomText != null) {
+                // Draw the bottom text.
+                int end = mBottomText.length();
+                String bottomStr = mBottomText;
+                if (mBottomTextWidth > mViewSize) {
+                    end = (int) (mViewSize * 1.0f / mBottomTextWidth * end) - 2;
+                    bottomStr = mBottomText.substring(0, end) + "..";
+                    end = end + "..".length();
+
+                }
+                mTextPaint.setTextSize(mBottomTextSize);
+                canvas.drawText(bottomStr, 0, end, mViewSize / 2, (mViewSize) / 2 + mBottomTextHeight, mTextPaint);
+            }
+            if (mStatusText != null) {
+                mTextPaint.setTextSize(mStatusTextSize);
+                float offset = mTextPaint.measureText("M");
+                if (adjust) {
+                    canvas.drawText(mStatusText, mViewSize - 1.3f * offset, (mViewSize - mTextPadding - (mTopTextHeight - mStatusTextHeight)) / 2, mTextPaint);
+                } else {
+                    canvas.drawText(mStatusText, (mViewSize + mTopTextWidth + mStatusTextWidth + 0.5f * offset) / 2, (mViewSize - mTextPadding - (mTopTextHeight - mStatusTextHeight)) / 2, mTextPaint);
+                }
+            }
+        } else {
+            mTextPaint.setTextAlign(Paint.Align.CENTER);
+            mTextPaint.setTextSize(mCenterTextSize);
+            Paint.FontMetricsInt fontMetrics = mTextPaint.getFontMetricsInt();
+            int baseline = (getMeasuredHeight() - fontMetrics.bottom + fontMetrics.top) / 2 - fontMetrics.top;
+            canvas.drawText(mCenterText, mViewSize / 2, baseline, mTextPaint);
+        }
     }
 
     /**
@@ -241,25 +271,6 @@ public class CircleTextView extends View {
     public void setTopTextSize(float topTextSize) {
         mTopTextSize = topTextSize;
         invalidateTextPaintAndMeasurements();
-    }
-
-    /**
-     * Gets the example drawable attribute value.
-     *
-     * @return The example drawable attribute value.
-     */
-    public Drawable getExampleDrawable() {
-        return mExampleDrawable;
-    }
-
-    /**
-     * Sets the view's example drawable attribute value. In the example view, this drawable is
-     * drawn above the text.
-     *
-     * @param exampleDrawable The example drawable attribute value to use.
-     */
-    public void setExampleDrawable(Drawable exampleDrawable) {
-        mExampleDrawable = exampleDrawable;
     }
 
     public CircleTextView setBorderColor(int color) {
