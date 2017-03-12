@@ -68,21 +68,14 @@ public class CircleTextView extends View {
         mBottomText = a.getString(R.styleable.CircleTextView_bottomText);
         mStatusText = a.getString(R.styleable.CircleTextView_statusText);
         mTextColor = a.getColor(R.styleable.CircleTextView_textColor,mTextColor);
+        mBorderColor = a.getColor(R.styleable.CircleTextView_borderColor, mBorderColor);
         mBackgroundColor = a.getColor(R.styleable.CircleTextView_backgroundColor,mBackgroundColor);
-        // Use getDimensionPixelSize or getDimensionPixelOffset when dealing with
-        // values that should fall on pixel boundaries.
+
         mTopTextSize = a.getDimension(R.styleable.CircleTextView_topTextSize, mTopTextSize);
         mCenterTextSize = a.getDimension(R.styleable.CircleTextView_centerTextSize, mCenterTextSize);
         mBottomTextSize = a.getDimension(R.styleable.CircleTextView_bottomTextSize,mBottomTextSize);
         mStatusTextSize = a.getDimension(R.styleable.CircleTextView_statusTextSize, mStatusTextSize);
         mBorderSize = a.getDimension(R.styleable.CircleTextView_borderSize,mBorderSize);
-        mBorderColor = a.getColor(R.styleable.CircleTextView_borderColor, mBorderColor);
-
-//        if (a.hasValue(R.styleable.CircleTextView_exampleDrawable)) {
-//            mExampleDrawable = a.getDrawable(
-//                    R.styleable.CircleTextView_exampleDrawable);
-//            mExampleDrawable.setCallback(this);
-//        }
 
         a.recycle();
 
@@ -93,10 +86,9 @@ public class CircleTextView extends View {
 
         mBorderPaint = new TextPaint();
         mBorderPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
-        mBorderPaint.setTextAlign(Paint.Align.LEFT);
         mBorderPaint.setStyle(Paint.Style.STROKE);
-        setBackgroundResource(android.R.color.transparent);
 
+        setBackgroundResource(android.R.color.transparent);
 
         // Update TextPaint and text measurements from attributes
         invalidateTextPaintAndMeasurements();
@@ -213,64 +205,19 @@ public class CircleTextView extends View {
         }
     }
 
-    /**
-     * Gets the example string attribute value.
-     *
-     * @return The example string attribute value.
-     */
-    public String getTopText() {
-        return mTopText;
-    }
-
-    /**
-     * Sets the view's example string attribute value. In the example view, this string
-     * is the text to draw.
-     *
-     * @param topText The example string attribute value to use.
-     */
     public CircleTextView setTopText(String topText) {
         mTopText = topText;
         return this;
     }
 
-    /**
-     * Gets the example color attribute value.
-     *
-     * @return The example color attribute value.
-     */
-    public int getTextColor() {
-        return mTextColor;
-    }
-
-    /**
-     * Sets the view's example color attribute value. In the example view, this color
-     * is the font color.
-     *
-     * @param textColor The example color attribute value to use.
-     */
     public CircleTextView setTextColor(int textColor) {
         mTextColor = textColor;
         return this;
     }
 
-    /**
-     * Gets the example dimension attribute value.
-     *
-     * @return The example dimension attribute value.
-     */
-    public float getTopTextSize() {
-        return mTopTextSize;
-    }
-
-    /**
-     * Sets the view's example dimension attribute value. In the example view, this dimension
-     * is the font size.
-     *
-     * @param topTextSize The example dimension attribute value to use.
-     */
-    public void setTopTextSize(float topTextSize) {
+    public CircleTextView setTopTextSize(float topTextSize) {
         mTopTextSize = topTextSize;
-        invalidateTextPaintAndMeasurements();
+        return this;
     }
 
     public CircleTextView setBorderColor(int color) {
@@ -293,5 +240,21 @@ public class CircleTextView extends View {
         invalidateTextPaintAndMeasurements();
         super.invalidate();
 
+    }
+
+    public String getTopText() {
+        return mTopText;
+    }
+
+    public String getCenterText() {
+        return mCenterText;
+    }
+
+    public String getBottomText() {
+        return mBottomText;
+    }
+
+    public String getStatusText() {
+        return mStatusText;
     }
 }
