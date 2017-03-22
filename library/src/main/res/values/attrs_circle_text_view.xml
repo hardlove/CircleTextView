@@ -1,18 +1,18 @@
 <resources>
     <declare-styleable name="CircleTextView">
-        <attr name="topText" format="string"/>
-        <attr name="centerText" format="string"/>
-        <attr name="bottomText" format="string"/>
-        <attr name="statusText" format="string"/>
+        <attr name="ct_topText" format="string"/>
+        <attr name="ct_centerText" format="string"/>
+        <attr name="ct_bottomText" format="string"/>
+        <attr name="ct_statusText" format="string"/>
 
-        <attr name="topTextSize" format="dimension"/>
-        <attr name="centerTextSize" format="dimension"/>
-        <attr name="bottomTextSize" format="dimension"/>
-        <attr name="statusTextSize" format="dimension"/>
+        <attr name="ct_topTextSize" format="dimension"/>
+        <attr name="ct_centerTextSize" format="dimension"/>
+        <attr name="ct_bottomTextSize" format="dimension"/>
+        <attr name="ct_statusTextSize" format="dimension"/>
 
-        <attr name="textColor" format="color"/>
-        <attr name="borderColor" format="color"/>
-        <attr name="backgroundColor" format="color"/>
-        <attr name="borderSize" format="dimension"/>
+        <attr name="ct_textColor" format="color"/>
+        <attr name="ct_borderColor" format="color"/>
+        <attr name="ct_backgroundColor" format="color"/>
+        <attr name="ct_borderSize" format="dimension"/>
     </declare-styleable>
 </resources>

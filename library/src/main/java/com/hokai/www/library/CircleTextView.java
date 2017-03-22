@@ -63,19 +63,19 @@ public class CircleTextView extends View {
         final TypedArray a = getContext().obtainStyledAttributes(
                 attrs, R.styleable.CircleTextView, defStyle, 0);
 
-        mTopText = a.getString( R.styleable.CircleTextView_topText);
-        mCenterText = a.getString( R.styleable.CircleTextView_centerText);
-        mBottomText = a.getString(R.styleable.CircleTextView_bottomText);
-        mStatusText = a.getString(R.styleable.CircleTextView_statusText);
-        mTextColor = a.getColor(R.styleable.CircleTextView_textColor,mTextColor);
-        mBorderColor = a.getColor(R.styleable.CircleTextView_borderColor, mBorderColor);
-        mBackgroundColor = a.getColor(R.styleable.CircleTextView_backgroundColor,mBackgroundColor);
+        mTopText = a.getString( R.styleable.CircleTextView_ct_topText);
+        mCenterText = a.getString( R.styleable.CircleTextView_ct_centerText);
+        mBottomText = a.getString(R.styleable.CircleTextView_ct_bottomText);
+        mStatusText = a.getString(R.styleable.CircleTextView_ct_statusText);
+        mTextColor = a.getColor(R.styleable.CircleTextView_ct_textColor,mTextColor);
+        mBorderColor = a.getColor(R.styleable.CircleTextView_ct_borderColor, mBorderColor);
+        mBackgroundColor = a.getColor(R.styleable.CircleTextView_ct_backgroundColor,mBackgroundColor);
 
-        mTopTextSize = a.getDimension(R.styleable.CircleTextView_topTextSize, mTopTextSize);
-        mCenterTextSize = a.getDimension(R.styleable.CircleTextView_centerTextSize, mCenterTextSize);
-        mBottomTextSize = a.getDimension(R.styleable.CircleTextView_bottomTextSize,mBottomTextSize);
-        mStatusTextSize = a.getDimension(R.styleable.CircleTextView_statusTextSize, mStatusTextSize);
-        mBorderSize = a.getDimension(R.styleable.CircleTextView_borderSize,mBorderSize);
+        mTopTextSize = a.getDimension(R.styleable.CircleTextView_ct_topTextSize, mTopTextSize);
+        mCenterTextSize = a.getDimension(R.styleable.CircleTextView_ct_centerTextSize, mCenterTextSize);
+        mBottomTextSize = a.getDimension(R.styleable.CircleTextView_ct_bottomTextSize,mBottomTextSize);
+        mStatusTextSize = a.getDimension(R.styleable.CircleTextView_ct_statusTextSize, mStatusTextSize);
+        mBorderSize = a.getDimension(R.styleable.CircleTextView_ct_borderSize,mBorderSize);
 
         a.recycle();
 
