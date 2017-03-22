@@ -251,6 +251,10 @@ public class CircleTextView extends View {
         mStatusTextSize = statusTextSize;
         return this;
     }
+    public CircleTextView setCircleBackgroundColor(int color) {
+        mBackgroundColor = color;
+        return this;
+    }
 
     @Override
     public void invalidate() {
