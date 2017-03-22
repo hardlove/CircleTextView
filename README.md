@@ -23,7 +23,7 @@ Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency
 
 	dependencies {
-	        compile 'com.github.hardlove:CircleTextView:1.1'
+	        compile 'com.github.hardlove:CircleTextView:2.0'
 	}
 Share this release:
 
