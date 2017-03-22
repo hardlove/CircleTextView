@@ -210,6 +210,11 @@ public class CircleTextView extends View {
         return this;
     }
 
+    public CircleTextView setCenterText(String centerText) {
+        mCenterText = centerText;
+        return this;
+    }
+
     public CircleTextView setTextColor(int textColor) {
         mTextColor = textColor;
         return this;
@@ -217,6 +222,10 @@ public class CircleTextView extends View {
 
     public CircleTextView setTopTextSize(float topTextSize) {
         mTopTextSize = topTextSize;
+        return this;
+    }
+    public CircleTextView setCenterTextSize(float centerTextSize) {
+        mCenterTextSize = centerTextSize;
         return this;
     }
 
@@ -229,9 +238,17 @@ public class CircleTextView extends View {
         mBottomText = bottomText;
         return this;
     }
+    public CircleTextView setBottomTextSize(float bottomTextSize) {
+        mBottomTextSize = bottomTextSize;
+        return this;
+    }
 
     public CircleTextView setStatusText(String statusText) {
         mStatusText = statusText;
+        return this;
+    }
+    public CircleTextView setStatusTextSize(float statusTextSize) {
+        mStatusTextSize = statusTextSize;
         return this;
     }
 
