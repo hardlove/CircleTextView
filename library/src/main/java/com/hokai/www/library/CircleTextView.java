@@ -11,6 +11,7 @@ import android.graphics.Rect;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -103,6 +104,7 @@ public class CircleTextView extends View {
             mTopTextWidth = mRect.width();
             mTopTextHeight = mRect.height();
         }
+        Log.d("Test", "mTopTextSize:" + mTopTextSize);
         if (mCenterText != null) {
             mTextPaint.setTextSize(mCenterTextSize);
             mTextPaint.getTextBounds(mCenterText, 0, mCenterText.length(), mRect);
@@ -122,81 +124,120 @@ public class CircleTextView extends View {
             mStatusTextWidth = mRect.width();
             mStatusTextHeight = mRect.height();
         }
-        mBorderPaint.setStrokeWidth(mBorderSize);
-        mBorderPaint.setColor(mBorderColor);
+
     }
 
 
+    private boolean first = true;
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        mViewSize = Math.min(getMeasuredHeight(), getMeasuredWidth());
-        setMeasuredDimension(mViewSize, mViewSize);
-        mTextPadding = mViewSize / 10;
-
+        if (first) {
+            mViewSize = Math.max(getMeasuredHeight(), getMeasuredWidth());
+            setMeasuredDimension(mViewSize, mViewSize);
+            mTextPadding = mViewSize / 10;
+            first = false;
+        }
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
+        drawBackground(canvas);
+        drawText(canvas);
+        drawBorder(canvas);
+
+
+    }
+
+    private void drawBorder(Canvas canvas) {
+        //Draw border
+        mBorderPaint.setStyle(Paint.Style.STROKE);
+        mBorderPaint.setColor(mBorderColor);
+        mBorderPaint.setStrokeWidth(mBorderSize);
+        mBorderPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER));
+        canvas.drawCircle(mViewSize / 2, mViewSize / 2, (mViewSize - mBorderSize) / 2, mBorderPaint);
+    }
+
+    private void drawBackground(Canvas canvas) {
         //Draw background
         mBorderPaint.setColor(mBackgroundColor);
         mBorderPaint.setStyle(Paint.Style.FILL);
         canvas.drawCircle(mViewSize / 2, mViewSize / 2, mViewSize / 2, mBorderPaint);
-
-        drawText(canvas);
-
-        //Draw border
-        mBorderPaint.setStyle(Paint.Style.STROKE);
-        mBorderPaint.setColor(mBorderColor);
-        mBorderPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_OVER));
-        canvas.drawCircle(mViewSize / 2, mViewSize / 2, (mViewSize - mBorderSize) / 2, mBorderPaint);
-
     }
 
     private void drawText(Canvas canvas) {
-        mTextPaint.setColor(mTextColor);
-        if (TextUtils.isEmpty(mCenterText)) {
-            mTextPaint.setTextAlign(Paint.Align.CENTER);
-            boolean adjust = false;
-            String topStr = mTopText;
-            if (mTopText != null) {
-                // Draw the top text.
-                int end = mTopText.length();
-                if (mTopTextWidth + 2 * mStatusTextWidth > mViewSize) {
-
-                    end = (int) (mViewSize * 1.0f / mTopTextWidth * end) - 2;
-                    topStr = mTopText.substring(0, end);
-                    topStr = topStr + "..";
-                    end = topStr.length();
-                    adjust = true;
-                }
-                mTextPaint.setTextSize(mTopTextSize);
-                canvas.drawText(topStr, 0, end, mViewSize / 2, (mViewSize - mTextPadding) / 2, mTextPaint);
-            }
-
-            if (mBottomText != null) {
-                // Draw the bottom text.
-                int end = mBottomText.length();
-                String bottomStr = mBottomText;
-                if (mBottomTextWidth > mViewSize) {
-                    end = (int) (mViewSize * 1.0f / mBottomTextWidth * end) - 2;
-                    bottomStr = mBottomText.substring(0, end) + "..";
-                    end = end + "..".length();
-
-                }
-                mTextPaint.setTextSize(mBottomTextSize);
-                canvas.drawText(bottomStr, 0, end, mViewSize / 2, (mViewSize) / 2 + mBottomTextHeight, mTextPaint);
-            }
-            if (mStatusText != null) {
-                mTextPaint.setTextSize(mStatusTextSize);
-                float offset = mTextPaint.measureText("M");
-                if (adjust) {
-                    canvas.drawText(mStatusText, mViewSize - 1.3f * offset, (mViewSize - mTextPadding - (mTopTextHeight - mStatusTextHeight)) / 2, mTextPaint);
-                } else {
-                    canvas.drawText(mStatusText, (mViewSize + mTopTextWidth + mStatusTextWidth + 0.5f * offset) / 2, (mViewSize - mTextPadding - (mTopTextHeight - mStatusTextHeight)) / 2, mTextPaint);
-                }
-            }
+        if (mTextPadding < mCenterTextHeight) {
+            mTextPadding = mCenterTextHeight;
+        }
+        if (!TextUtils.isEmpty(mCenterText)) {
+            drawCenterText(canvas);
         } else {
+            drawTopText(canvas);
+            drawBottomText(canvas);
+        }
+
+    }
+
+    private void drawTopText(Canvas canvas) {
+        mTextPaint.setColor(mTextColor);
+        mTextPaint.setTextAlign(Paint.Align.CENTER);
+        boolean adjust = false;
+        float newSize = 0;
+        if (mTopText != null) {
+            // Draw the top text.
+
+            if (mTopTextWidth + 2 * mStatusTextWidth > mViewSize) {
+                int end = mTopText.length();
+                newSize = mViewSize * 1.0f / (end);
+                adjust = true;
+            }
+
+            if (adjust) {
+                mTextPaint.setTextAlign(Paint.Align.LEFT);
+                mTextPaint.setTextSize(newSize);
+                Rect mRect = new Rect();
+                mTextPaint.setTextSize(newSize);
+                mTextPaint.getTextBounds(mTopText, 0, mTopText.length(), mRect);
+                canvas.drawText(mTopText, 0, mTopText.length(), (mViewSize - mRect.width() - mStatusTextWidth) * 1.0f / 2, (mViewSize - mTextPadding) / 2, mTextPaint);
+            } else {
+                mTextPaint.setTextAlign(Paint.Align.CENTER);
+                mTextPaint.setTextSize(mTopTextSize);
+                canvas.drawText(mTopText, 0, mTopText.length(), mViewSize / 2, (mViewSize - mTextPadding) / 2, mTextPaint);
+            }
+            Log.i("Test", "adjust:" + adjust + "  mTextPadding:" + mTextPadding);
+        }
+        if (mStatusText != null) {
+            mTextPaint.setTextAlign(Paint.Align.CENTER);
+            mTextPaint.setTextSize(mStatusTextSize);
+            float offset = mTextPaint.measureText("M");
+            if (adjust) {
+                canvas.drawText(mStatusText, mViewSize - 1.3f * offset, (mViewSize - mTextPadding - (mTopTextHeight - mStatusTextHeight)) / 2 + (mTopTextHeight - newSize), mTextPaint);
+            } else {
+                canvas.drawText(mStatusText, (mViewSize + mTopTextWidth + mStatusTextWidth + 0.5f * offset) / 2, (mViewSize - mTextPadding - (mTopTextHeight - mStatusTextHeight)) / 2, mTextPaint);
+            }
+        }
+    }
+
+    private void drawBottomText(Canvas canvas) {
+        if (mBottomText != null) {
+            // Draw the bottom text.
+            mTextPaint.setColor(mTextColor);
+            int end = mBottomText.length();
+            mTextPaint.setTextAlign(Paint.Align.CENTER);
+            if (mBottomTextWidth > mViewSize) {
+                float newSize = mViewSize * 1.0f / end;
+                mTextPaint.setTextSize(newSize);
+            } else {
+                mTextPaint.setTextSize(mBottomTextSize);
+            }
+            canvas.drawText(mBottomText, 0, end, mViewSize / 2, (mViewSize + mTextPadding ) / 2 + mBottomTextHeight, mTextPaint);
+        }
+    }
+
+    private void drawCenterText(Canvas canvas) {
+        if (mCenterText != null) {
+            // Draw the center text.
+            mTextPaint.setColor(mTextColor);
             mTextPaint.setTextAlign(Paint.Align.CENTER);
             mTextPaint.setTextSize(mCenterTextSize);
             Paint.FontMetricsInt fontMetrics = mTextPaint.getFontMetricsInt();

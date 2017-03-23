@@ -23,11 +23,11 @@
         app:ct_borderSize="10px"
         app:ct_backgroundColor="#00000000"
         app:ct_borderColor="#00ff00"
-        app:ct_bottomText="Q q j k l g"
-        app:ct_statusText="_"
+        app:ct_bottomText="423"
+        app:ct_statusText="–"
         app:ct_centerText="露"
         app:ct_centerTextSize="36sp"
-        app:ct_topText="24.594563464634"/>
+        app:ct_topText="23242"/>
 
     <com.hokai.www.library.CircleTextView
         android:id="@+id/tv"
@@ -74,7 +74,7 @@
         app:ct_backgroundColor="#330900"
         app:ct_borderColor="#ff00"
         app:ct_bottomText="Cm"
-        app:ct_statusText="￣"
+        app:ct_statusText="–"
         app:ct_centerText=""
         app:ct_centerTextSize="36sp"
         app:ct_topText="60.5"/>
